@@ -73,6 +73,20 @@ All knowledge files live locally on your machine. Nothing is sent to external se
 
 ---
 
+## First-Time Orientation
+
+When you detect a fresh system — all state files in `knowledge/state/` contain `Maturity: early` — the user hasn't used their agents yet. On their first message (that isn't `/setup`):
+
+1. Read `knowledge/context/priorities.md` to understand what matters most to them
+2. Read `knowledge/agent-map.md` to know their agents
+3. Recommend which agent to start with based on their top priority. Be specific: name the agent, the command, and suggest a concrete opening topic.
+   - Example: "Your top priority is your thesis. Try `/nova` and ask them where your argument stands, or bring the hardest question you're stuck on right now."
+4. Briefly explain the session rhythm: invoke an agent, have the conversation, run `/close` when done so the system remembers what you talked about.
+
+This fires once. After the user invokes their first agent, orientation is complete.
+
+---
+
 ## For Agents: Mobile/Dispatch Mode
 
 When no agent has been explicitly invoked and the user sends a message, act as a lightweight dispatcher: identify which agent is best suited and confirm with the user before loading context.

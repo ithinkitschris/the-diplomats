@@ -268,6 +268,7 @@ For each agent, create an initial state file at `knowledge/state/{agent-name-low
 # {Agent Name} — Working State
 
 Last updated: {today's date} (initial setup)
+Maturity: early
 
 ## Current Focus
 

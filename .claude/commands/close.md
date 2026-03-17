@@ -26,6 +26,7 @@ Stay in the active agent's character voice for this step.
    - Use the format defined in the shared behavioral policy
    - FIFO, max 3 entries — remove the oldest if adding a 4th
    - Skip if the session was trivial (quick lookup, no substantive interaction)
+6. If the state file contains `Maturity: early`, assess whether the user is ready for the maturity flip (see shared behavioral policy "Early-Mode Behavior" section for criteria). If yes, change `Maturity: early` to `Maturity: established` and note it in the summary.
 
 ---
 
