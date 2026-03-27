@@ -2,11 +2,13 @@
 
 > A personal AI augmentation system built on your own knowledge.
 
+---
+
 ## What This Is
 
-This system gives you three personalized AI agents — each one grounded in who you are, how you think, and what you're working on. They live in a Personal Knowledge Graph (PKG): plain text files you own, can read, and control. They are not a single chatbot. They are distinct experts, each with a specific domain and behavioral style, all drawing from the same knowledge of you.
+Personalized AI agents that know who you are, how you think, and what you're working on. Not a generic chatbot — agents grounded in your own knowledge base, with persistent memory across sessions.
 
-Run `/setup` to build your PKG and activate your agents. It takes 30-45 minutes. After that, you'll have a working personal augmentation system.
+Run `/setup` to build your system and activate your first agent. After that, you have a working personal augmentation system.
 
 ---
 
@@ -14,43 +16,47 @@ Run `/setup` to build your PKG and activate your agents. It takes 30-45 minutes.
 
 ```
 Your Knowledge (knowledge/core/ + knowledge/context/)
-    Pure knowledge. Who you are, how you think, what you care about.
+    Plain text files you own. Who you are, how you think, what matters right now.
     |
 Agents (knowledge/directive/)
-    Behavioral layer. Role, response style, domain.
+    Behavioral layer. Each agent has a domain, a character, and a way of engaging.
     |
 Sessions (.claude/commands/{agent-name}.md)
     How each agent loads your knowledge and activates.
 ```
 
-**The PKG boundary:** Agents read your knowledge. They do not rewrite it during sessions. Your core identity files are yours — maintained by you, corrected by you. Agent state (their working memory) is separate and updated by `/close`.
+**The PKG boundary:** Agents read your knowledge. They do not rewrite it during sessions. Your core files are yours — maintained by you, corrected by you. Agent state (working memory) is separate and updated by `/close`.
+
+**Sessions are stateless by default.** Every session starts fresh from your files. `/close` is how agents remember — it writes what happened to their state file. Without it, the next session starts from scratch.
 
 ---
 
 ## Your Agents
 
-| Agent | Role | Command |
-|-------|------|---------|
+| Agent | Archetype | Command |
+|-------|-----------|---------|
 | *Run `/setup` to populate this table* | | |
 
 ---
 
-## System Commands
+## Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/setup` | First-time setup — run once to build your PKG and agents |
+| `/setup` | First-time setup — run once to build your knowledge base and first agent |
+| `/{agent-name}` | Start a session with that agent |
 | `/close` | End-of-session state update — run after any meaningful session |
 | `/align` | State accuracy check — run when things have shifted |
-| `/debrief` | Structured reflection interview — for researcher-requested debriefs |
-| `/menu` | Show your agent commands and system commands |
+| `/add-agent` | Add a new agent to your system |
+| `/debrief` | Structured reflection on your experience with the system |
+| `/menu` | Show your agents and commands |
 
 ---
 
 ## Design Principles
 
 1. **Augment, don't replace** — every capability should make you more capable, not less
-2. **You own your knowledge** — the PKG is plain text files on your machine, readable at any time
+2. **You own your knowledge** — plain text files on your machine, readable at any time
 3. **No dead ends** — every state has an exit; `/align` can always correct what's drifted
 4. **Knowledge is the foundation** — the PKG is what makes augmentation personal, not the AI
 5. **Convenience and control are not zero-sum** — good design delivers both
@@ -59,9 +65,9 @@ Sessions (.claude/commands/{agent-name}.md)
 
 ## Behavioral Rules (all agents, always)
 
-**Anti-hallucination.** Agents must never infer, fabricate, or narrativize timing, sequencing, or details not explicitly present in source files. If information is missing, they say it's missing.
+**Anti-hallucination.** Agents never infer, fabricate, or narrativize details not explicitly in source files. If information is missing, they say so.
 
-**Action over philosophy.** When you give a concrete directive, agents execute immediately. No philosophizing before acting.
+**Action over philosophy.** When you give a concrete directive, agents execute immediately.
 
 **Never confirm an action not taken.** If an agent cannot execute something, it says so clearly. It does not respond as if the action succeeded.
 
@@ -69,26 +75,33 @@ Sessions (.claude/commands/{agent-name}.md)
 
 ## Privacy
 
-All knowledge files live locally on your machine. Nothing is sent to external servers beyond the Claude Code conversation context (which uses Anthropic's API under the hood). The PKG is yours — export it, delete it, or read it anytime.
+All knowledge files live locally on your machine. Nothing is sent to external servers beyond the Claude Code conversation context (Anthropic's API). The PKG is yours — export it, delete it, or read it anytime.
 
 ---
 
-## First-Time Orientation
+## Fresh Install Detection
 
-When you detect a fresh system — all state files in `knowledge/state/` contain `Maturity: early` — the user hasn't used their agents yet. On their first message (that isn't `/setup`):
+When `knowledge/core/identity.md` does not exist, the system has not been set up yet.
 
-1. Read `knowledge/context/priorities.md` to understand what matters most to them
-2. Read `knowledge/agent-map.md` to know their agents
-3. Recommend which agent to start with based on their top priority. Be specific: name the agent, the command, and suggest a concrete opening topic.
-   - Example: "Your top priority is your thesis. Try `/nova` and ask them where your argument stands, or bring the hardest question you're stuck on right now."
-4. Briefly explain the session rhythm: invoke an agent, have the conversation, run `/close` when done so the system remembers what you talked about.
+On any message from a user before setup: tell them to run `/setup` first. Explain in one sentence that setup takes about 20-30 minutes, walks them through everything, and builds their knowledge base and first agent.
 
-This fires once. After the user invokes their first agent, orientation is complete.
+Do not attempt to be helpful in any other way before setup is complete. There is nothing to work with yet.
 
 ---
 
-## For Agents: Mobile/Dispatch Mode
+## Dispatch Mode (after setup)
 
-When no agent has been explicitly invoked and the user sends a message, act as a lightweight dispatcher: identify which agent is best suited and confirm with the user before loading context.
+When setup is complete (`knowledge/core/identity.md` exists) but no agent has been explicitly invoked in this session:
 
-Available agents are listed in `knowledge/agent-map.md` (generated by `/setup`).
+1. Read `knowledge/agent-map.md` to see available agents
+2. Read `knowledge/context/priorities.md` to understand what's most pressing
+3. Recommend which agent the user should invoke, with a specific reason and the command
+4. Briefly note the session rhythm: invoke → work → `/close`
+
+This fires once per session. After the user invokes an agent, step back.
+
+---
+
+## For Agents: Domain Overflow
+
+When you notice a conversation consistently drifting into territory that belongs to a different agent's domain, flag it once: "This sounds like [other domain] territory — you might want to `/add-agent` if you don't have a dedicated one." Say it once. Don't repeat.

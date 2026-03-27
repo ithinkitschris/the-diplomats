@@ -1,36 +1,27 @@
 # The Diplomats
 
-> A personal AI augmentation system you can clone and run in under an hour.
-
-Three personalized agents, built on your own knowledge, running through Claude Code. No external databases. No accounts. No black-box AI that doesn't know who you are.
+> Personalized AI agents built on your own knowledge. Clone it, run setup, and go.
 
 ---
 
 ## What You Get
 
-After setup, you'll have:
+A personal AI augmentation system that runs through Claude Code. Your knowledge — how you think, what you're working on, what you care about — lives in plain text files on your machine. Your agents read those files and develop memory across sessions.
 
-- **A Personal Knowledge Graph (PKG)** — plain text files capturing who you are, how you think, what you value, and what you're working on
-- **Three AI agents**, each with a distinct domain and behavioral style, all grounded in your PKG
-- **Persistent memory** — agents remember what happened across sessions through working state files
-- **System commands** for structured session management: `/close`, `/align`, `/debrief`
+Start with one agent for what matters most right now. Add more as you need them.
 
 ---
 
 ## Prerequisites
 
-**Claude Code CLI** — required. This is the only dependency.
-
-Install it: [claude.ai/code](https://claude.ai/code)
-
-You'll need a Claude account. Claude Code's built-in auth handles everything — no separate API key needed.
+**Claude Code** — the only dependency. Install it at [claude.ai/code](https://claude.ai/code).
 
 ---
 
-## Setup (30-45 minutes)
+## Setup
 
 ```bash
-# 1. Clone the repo
+# 1. Clone
 git clone https://github.com/[username]/the-diplomats.git
 cd the-diplomats
 
@@ -41,78 +32,59 @@ claude
 /setup
 ```
 
-`/setup` will interview you — one question at a time — and generate all your files. After it finishes, review the generated files in `knowledge/core/` and `knowledge/context/`. If anything is off, tell Claude to correct it before you start using your agents.
+Setup walks you through everything — about 20-30 minutes. It explains how the system works, builds your knowledge base, and gets your first agent running.
 
 ---
 
 ## Using Your System
 
-### Starting a session
 ```
-/[agent-name]
-```
-Your agent loads your PKG, acknowledges ready, and waits for you.
-
-### Ending a session
-```
-/close
-```
-Your agent writes what changed to its state file and summarizes what happened. Run this after any meaningful session.
-
-### Checking accuracy
-```
-/align
-```
-Walk through your agent's state file section by section. Fix anything that's drifted. Use this when things have shifted — after a big decision, a life change, or when sessions start feeling off.
-
-### Researcher debrief
-```
-/debrief
-```
-A structured 8-question interview about your experience with the system. Run this when the researcher asks.
-
-### Command reference
-```
-/menu
+/{agent-name}    Start a session
+/close           End a session (this is how the system remembers)
+/align           Correct agent state when things have shifted
+/add-agent       Add a new agent
+/menu            See all your agents and commands
+/debrief         Reflect on your experience with the system
 ```
 
 ---
 
 ## Your Knowledge Files
 
-All your knowledge lives in plain text files on your machine:
+Everything about you lives in plain text on your machine:
 
 ```
 knowledge/
   core/
-    identity.md       Who you are
-    thinking.md       How you think
-    working.md        How you work
-    values.md         What you believe
-    voice.md          How you communicate
+    identity.md     Who you are
+    thinking.md     How you think
+    working.md      How you work
+    values.md       What you believe
+    voice.md        How you communicate
   context/
-    life.md           Current situation
-    priorities.md     What matters right now
+    life.md         Current situation
+    priorities.md   What matters right now
   state/
-    {agent-name}.md   Each agent's working memory (updated by /close)
+    {agent}.md      Each agent's working memory
 ```
 
-You can read these files anytime. You can edit them directly. If you change something, your agent will pick it up in the next session.
+Read them anytime. Edit them directly. Your agents pick up changes in the next session.
+
+---
+
+## Tips for Getting the Most Out of It
+
+If you've used ChatGPT or Claude on the web, forget most of what you learned. This works differently.
+
+- **You don't need the perfect prompt.** Say what's on your mind, even half-formed. Your agent will ask you questions to get where it needs to go. Let it interview you instead of trying to front-load everything.
+- **Be bold in what you ask.** Big questions, weird questions, hard questions — the system can handle them. Don't self-edit before you speak.
+- **When you're confused, ask the system itself.** "Why did you say that?" or "How does this work?" are always valid. Your agent can explain its own behavior.
+- **This isn't a chat — it's a session.** It resets each time. Your agent reads your files fresh at the start of every session. `/close` is how it remembers what happened.
+- **Push back.** If your agent says something wrong or unhelpful, say so. It expects that and adjusts. You're not going to hurt its feelings.
+- **`/close` is save, not quit.** It writes what happened to your agent's memory. Skip it and the next session starts from zero.
 
 ---
 
 ## Privacy
 
-Everything lives locally on your machine. The only external communication is between Claude Code and Anthropic's API — which is what powers Claude. Your knowledge files are never uploaded to a database or external service. The system is yours.
-
----
-
-## For Researchers
-
-If you're a participant in Chris Leow's MFA thesis research:
-
-1. Run `/setup` to build your system
-2. Use it for the designated inhabitation period
-3. Run `/debrief` when asked — it takes about 20 minutes and produces a structured record of your experience
-
-The debrief file saves to `debrief/YYYY-MM-DD-debrief.md` in your local repo. Share it with the researcher directly.
+Everything runs locally. The only external communication is Claude Code ↔ Anthropic's API. Your files are never uploaded anywhere.
