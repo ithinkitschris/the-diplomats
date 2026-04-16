@@ -54,6 +54,13 @@ Ask three questions using AskUserQuestion, one at a time:
 
 **Q3:** "What name do you want to give them?"
 
+Before accepting the name, normalize it to the eventual file/command form (lowercase, spaces replaced with hyphens) and reject conflicts. Reserved names are:
+- Existing agents already present in `knowledge/agent-map.md`
+- System capabilities: `setup`, `close`, `align`, `add-agent`, `debrief`, `menu`
+- Existing directories in `.codex/skills/`
+
+If there's a conflict, explain it briefly and ask for a different name.
+
 ---
 
 ## Step 5: Generate Agent Files
@@ -154,13 +161,23 @@ Acknowledge ready with a single line: your name and one open observation or ques
 $ARGUMENTS
 ```
 
+### Generate the Codex skill
+
+Read `.codex/templates/agent-skill.md` and replace all `{{PLACEHOLDERS}}`:
+- `{{AGENT_NAME}}` → the name the user gave
+- `{{AGENT_FILE_NAME}}` → name lowercased, spaces replaced with hyphens
+- `{{AGENT_ARCHETYPE}}` → the chosen archetype in natural language
+- `{{ROLE_BRIEF}}` → the same one-sentence role brief used in the Claude command
+
+Write to `.codex/skills/{agent-name-lowercase}/SKILL.md`.
+
 ### Update agent-map.md
 
 Read the current `knowledge/agent-map.md` and add a new row for this agent.
 
-### Update CLAUDE.md agent table
+### Update host docs
 
-Read `CLAUDE.md` and add the new agent to the agent table.
+Read `CLAUDE.md` and `AGENTS.md` and add the new agent to both agent tables.
 
 ---
 
@@ -168,9 +185,11 @@ Read `CLAUDE.md` and add the new agent to the agent table.
 
 Tell the user:
 
-> "{Agent Name} is ready. Run `/{agent-name}` to start a session.
+> "{Agent Name} is ready. Run `/{agent-name}` in Claude Code or say `{Agent Name}` in Codex to start a session.
 >
 > Their domain: [archetype/scope]
 > Their personality: [character description in one line]"
+
+If they want to use Codex too, tell them to run `bash scripts/sync-codex.sh` so the generated skill is linked into `~/.codex/skills`.
 
 $ARGUMENTS

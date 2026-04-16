@@ -8,7 +8,7 @@
 
 Personalized AI agents that know who you are, how you think, and what you're working on. Not a generic chatbot — agents grounded in your own knowledge base, with persistent memory across sessions.
 
-This repo supports **Claude Code** and **Codex**. Run `/setup` or `setup` once to build your system and activate your first agent. After that, you have a working personal augmentation system on both hosts.
+This repo supports **Claude Code** and **Codex**. Run setup once to build your system and activate your first agent. After that, you have a working personal augmentation system on both hosts.
 
 ---
 
@@ -25,7 +25,7 @@ Sessions (.claude/commands/{agent-name}.md + .codex/skills/{agent-name}/SKILL.md
     How each agent loads your knowledge and activates on each host.
 ```
 
-**The PKG boundary:** Agents read your knowledge. They do not rewrite it during sessions. Your core files are yours — maintained by you, corrected by you. Agent state (working memory) is separate and updated by `close` / `/close`.
+**The PKG boundary:** Agents read your knowledge. They do not rewrite it during sessions. Your core files are yours — maintained by you, corrected by you. Agent state (working memory) is separate and updated by `close`.
 
 **Sessions are stateless by default.** Every session starts fresh from your files. `close` / `/close` is how agents remember — it writes what happened to their state file. Without it, the next session starts from scratch.
 
@@ -33,18 +33,18 @@ Sessions (.claude/commands/{agent-name}.md + .codex/skills/{agent-name}/SKILL.md
 
 ## Your Agents
 
-| Agent | Archetype | Command |
-|-------|-----------|---------|
-| *Run `/setup` to populate this table* | | |
+| Agent | Archetype | Claude Command |
+|-------|-----------|----------------|
+| *Run setup to populate this table* | | |
 
 ---
 
 ## Commands
 
-In Claude Code, use slash commands. In Codex, use the same capability names in plain language or slash form.
+In **Claude Code**, use slash commands. In **Codex**, ask for the same capability in plain language or use the same slash form if you prefer.
 
-| Command | What it does |
-|---------|-------------|
+| Capability | What it does |
+|------------|--------------|
 | `setup` / `/setup` | First-time setup — run once to build your knowledge base and first agent |
 | `{agent-name}` / `/{agent-name}` | Start a session with that agent |
 | `close` / `/close` | End-of-session state update — run after any meaningful session |

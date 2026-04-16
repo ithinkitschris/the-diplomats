@@ -6,7 +6,7 @@
 
 ## What You Get
 
-A personal AI augmentation system that runs through Claude Code. Your knowledge — how you think, what you're working on, what you care about — lives in plain text files on your machine. Your agents read those files and develop memory across sessions.
+A personal AI augmentation system that runs through Claude Code or Codex. Your knowledge — how you think, what you're working on, what you care about — lives in plain text files on your machine. Your agents read those files and develop memory across sessions.
 
 Start with one agent for what matters most right now. Add more as you need them.
 
@@ -14,7 +14,8 @@ Start with one agent for what matters most right now. Add more as you need them.
 
 ## Prerequisites
 
-**Claude Code** — the only dependency. Install it at [claude.ai/code](https://claude.ai/code).
+- **Claude Code** — install it at [claude.ai/code](https://claude.ai/code).
+- **Codex** — install it with `npm install -g @openai/codex`, then run `codex login`.
 
 ---
 
@@ -25,18 +26,29 @@ Start with one agent for what matters most right now. Add more as you need them.
 git clone https://github.com/[username]/the-diplomats.git
 cd the-diplomats
 
-# 2. Open Claude Code
+# 2a. Claude Code path
 claude
 
-# 3. Run setup
+# 3a. Run setup
 /setup
 ```
 
-Setup walks you through everything — about 20-30 minutes. It explains how the system works, builds your knowledge base, and gets your first agent running.
+```bash
+# 2b. Codex path
+bash scripts/sync-codex.sh
+codex
+
+# 3b. Run setup
+setup
+```
+
+Setup walks you through everything — about 20-30 minutes. It explains how the system works, builds your knowledge base, and gets your first agent running on both hosts.
 
 ---
 
 ## Using Your System
+
+In Claude Code:
 
 ```
 /{agent-name}    Start a session
@@ -46,6 +58,19 @@ Setup walks you through everything — about 20-30 minutes. It explains how the 
 /menu            See all your agents and commands
 /debrief         Reflect on your experience with the system
 ```
+
+In Codex, use the same capability names in plain language or slash form:
+
+```
+{agent-name}     Start a session with that agent
+close            End a session and write memory to state
+align            Correct agent state when things have shifted
+add-agent        Add a new agent
+menu             See all your agents and commands
+debrief          Reflect on your experience with the system
+```
+
+If you create your first agent or add another one while using Codex, rerun `bash scripts/sync-codex.sh` so the generated agent skill is linked into `~/.codex/skills`.
 
 ---
 
@@ -79,12 +104,12 @@ If you've used ChatGPT or Claude on the web, forget most of what you learned. Th
 - **You don't need the perfect prompt.** Say what's on your mind, even half-formed. Your agent will ask you questions to get where it needs to go. Let it interview you instead of trying to front-load everything.
 - **Be bold in what you ask.** Big questions, weird questions, hard questions — the system can handle them. Don't self-edit before you speak.
 - **When you're confused, ask the system itself.** "Why did you say that?" or "How does this work?" are always valid. Your agent can explain its own behavior.
-- **This isn't a chat — it's a session.** It resets each time. Your agent reads your files fresh at the start of every session. `/close` is how it remembers what happened.
+- **This isn't a chat — it's a session.** It resets each time. Your agent reads your files fresh at the start of every session. `close` / `/close` is how it remembers what happened.
 - **Push back.** If your agent says something wrong or unhelpful, say so. It expects that and adjusts. You're not going to hurt its feelings.
-- **`/close` is save, not quit.** It writes what happened to your agent's memory. Skip it and the next session starts from zero.
+- **`close` / `/close` is save, not quit.** It writes what happened to your agent's memory. Skip it and the next session starts from zero.
 
 ---
 
 ## Privacy
 
-Everything runs locally. The only external communication is Claude Code ↔ Anthropic's API. Your files are never uploaded anywhere.
+Everything runs locally. The only external communication is your chosen host's conversation context with its model provider. Your files are never uploaded anywhere outside that interaction surface.

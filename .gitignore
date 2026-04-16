@@ -11,6 +11,27 @@ knowledge/agent-map.md
 knowledge/directive/*-behavioral.md
 !knowledge/directive/shared-behavioral.md
 
+# Generated Codex agent skills (tracked system skills are exempted)
+.codex/skills/*
+!.codex/skills/setup
+!.codex/skills/setup/
+!.codex/skills/setup/SKILL.md
+!.codex/skills/add-agent
+!.codex/skills/add-agent/
+!.codex/skills/add-agent/SKILL.md
+!.codex/skills/align
+!.codex/skills/align/
+!.codex/skills/align/SKILL.md
+!.codex/skills/close
+!.codex/skills/close/
+!.codex/skills/close/SKILL.md
+!.codex/skills/debrief
+!.codex/skills/debrief/
+!.codex/skills/debrief/SKILL.md
+!.codex/skills/menu
+!.codex/skills/menu/
+!.codex/skills/menu/SKILL.md
+
 # Generated agent commands (the system commands are tracked)
 # Note: generated agent commands will match /{agent-name}.md
 # System commands (setup, close, debrief, align, menu) are tracked via .gitignore exclusion

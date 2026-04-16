@@ -190,6 +190,13 @@ After they pick the archetype, ask three questions using AskUserQuestion (one at
 
 **Q3:** "What name do you want to give them?"
 
+Before accepting the name, normalize it to the eventual file/command form (lowercase, spaces replaced with hyphens) and reject conflicts. Reserved names are:
+- Existing agents already present in `knowledge/agent-map.md`
+- System capabilities: `setup`, `close`, `align`, `add-agent`, `debrief`, `menu`
+- Existing directories in `.codex/skills/`
+
+If there's a conflict, explain it briefly and ask for a different name.
+
 ---
 
 ## Phase 5: File Generation
@@ -348,7 +355,17 @@ Acknowledge ready with a single line: your name and one open observation or ques
 $ARGUMENTS
 ```
 
-### Step 5: Write agent-map.md
+### Step 5: Generate the Codex skill
+
+Read `.codex/templates/agent-skill.md` and replace all `{{PLACEHOLDERS}}`:
+- `{{AGENT_NAME}}` → the name the user gave
+- `{{AGENT_FILE_NAME}}` → the name lowercased, spaces replaced with hyphens
+- `{{AGENT_ARCHETYPE}}` → the chosen archetype in natural language
+- `{{ROLE_BRIEF}}` → the same one-sentence role brief used in the Claude command
+
+Write to `.codex/skills/{agent-name-lowercase}/SKILL.md`.
+
+### Step 6: Write agent-map.md
 
 Write `knowledge/agent-map.md`:
 
@@ -360,9 +377,9 @@ Write `knowledge/agent-map.md`:
 | {Agent Name} | {archetype} | knowledge/directive/{file} | knowledge/state/{file} | /{command} |
 ```
 
-### Step 6: Update CLAUDE.md agent table
+### Step 7: Update host docs
 
-Edit `CLAUDE.md` to replace the agent table placeholder with the actual agent name, archetype, and command.
+Edit `CLAUDE.md` and `AGENTS.md` to replace the agent table placeholder with the actual agent name, archetype, and command.
 
 ---
 
@@ -376,7 +393,7 @@ Tell the user:
 >
 > - **Your knowledge base** — 7 files in `knowledge/core/` and `knowledge/context/` capturing who you are
 > - **Your agent** — {Agent Name}, your {archetype} partner
-> - **Your command** — `/{agent-name}` to start a session
+> - **Your command** — `/{agent-name}` in Claude Code or `{Agent Name}` in Codex to start a session
 >
 > Let's do a quick first session right now so you can see how it works. I'll narrate what's happening as we go."
 
@@ -400,7 +417,7 @@ Then:
 4. **Let the session run naturally.** The agent responds as themselves. This is a real session, not a demo. Let it develop.
 
 5. **After a few exchanges, surface `/close`.** When there's a natural pause or the user seems satisfied, say:
-   > "When you're done — now or whenever — run `/close`. That's how {Agent Name} remembers this conversation. Without it, the next session starts from scratch."
+   > "When you're done — now or whenever — run `close` or `/close`. That's how {Agent Name} remembers this conversation. Without it, the next session starts from scratch."
 
 6. **Do not force the end.** If the user wants to keep going, let them. The guided part is done once they understand the rhythm. They'll run `/close` when ready.
 
@@ -414,5 +431,6 @@ The system is running. If the user asks what else they can do:
 - `/align` — review and correct agent state when things have shifted
 - `/add-agent` — add a second agent when they're ready
 - `/debrief` — structured reflection on the experience (optional, anytime)
+- `bash scripts/sync-codex.sh` — if they want Codex to pick up the generated agent skill immediately
 
 $ARGUMENTS
